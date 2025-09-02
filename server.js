@@ -1,7 +1,11 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import cors from 'cors';
 import dotenv from 'dotenv';
+import cors from 'cors';
+
+import userRoutes from './routes/UserRoutes.js';
+import appointmentRoutes from './routes/AppointmentRoutes.js';
+import workorderRoutes from './routes/WorkorderRoutes.js';
 
 dotenv.config();
 
@@ -9,63 +13,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// --- Mongo connection ---
-const mongoUri = process.env.MONGODB_URI;
-if (!mongoUri) {
-  console.error('Missing MONGODB_URI in environment!');
-  process.exit(1);
-}
-
 mongoose
-  .connect(mongoUri, { dbName: process.env.MONGODB_DB || 'myapp' })
-  .then(() => console.log('✅ Connected to MongoDB Atlas'))
-  .catch((err) => {
-    console.error('Mongo connection error:', err.message);
-    process.exit(1);
-  });
+  .connect(process.env.MONGODB_URI, {
+    dbName: process.env.MONGODB_DB || 'api-automation-tool'
+  })
+  .then(() => console.log('✅ MongoDB connected'))
+  .catch((err) => console.error('MongoDB error:', err));
 
-// --- Sample Mongoose model ---
-const Todo = mongoose.model(
-  'Todo',
-  new mongoose.Schema(
-    {
-      title: { type: String, required: true },
-      done: { type: Boolean, default: false }
-    },
-    { timestamps: true }
-  )
-);
+app.use('/users', userRoutes);
+app.use('/appointments', appointmentRoutes);
+app.use('/workorders', workorderRoutes);
 
-// --- Routes ---
-app.get('/', (_req, res) => {
-  res.send({ ok: true, message: 'Express + Mongo Atlas (free) is running!' });
-});
-
-app.get('/todos', async (_req, res) => {
-  const items = await Todo.find().sort({ createdAt: -1 }).lean();
-  res.send(items);
-});
-
-app.post('/todos', async (req, res) => {
-  const todo = await Todo.create({
-    title: req.body.title,
-    done: !!req.body.done
-  });
-  res.status(201).send(todo);
-});
-
-app.patch('/todos/:id', async (req, res) => {
-  const updated = await Todo.findByIdAndUpdate(req.params.id, req.body, {
-    new: true
-  });
-  res.send(updated);
-});
-
-app.delete('/todos/:id', async (req, res) => {
-  await Todo.findByIdAndDelete(req.params.id);
-  res.status(204).end();
-});
-
-// --- Start server ---
-const PORT = process.env.PORT || 3000; // Render will set PORT
-app.listen(PORT, () => console.log(`HTTP server listening on :${PORT}`));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
