@@ -6,6 +6,7 @@ import cors from 'cors';
 import userRoutes from './routes/UserRoutes.js';
 import appointmentRoutes from './routes/AppointmentRoutes.js';
 import workorderRoutes from './routes/WorkorderRoutes.js';
+import searchTimeslotRoutes from './routes/SearchTimeslotRoutes.js';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ mongoose
 
 app.use('/users', userRoutes);
 app.use('/appointments', appointmentRoutes);
+app.use('/searchTimeslot', searchTimeslotRoutes);
 app.use('/workorders', workorderRoutes);
 
 const PORT = process.env.PORT || 3000;
