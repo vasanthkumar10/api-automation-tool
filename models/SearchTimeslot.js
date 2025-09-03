@@ -50,7 +50,6 @@ const relatedEntitySchema = new mongoose.Schema(
 
 const searchTimeslotSchema = new mongoose.Schema(
   {
-    id: { type: String, required: true },
     status: { type: String },
     searchDate: { type: Date },
     relatedPlace: relatedPlaceSchema,

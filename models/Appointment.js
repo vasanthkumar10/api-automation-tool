@@ -64,7 +64,6 @@ const relatedEntitySchema = new mongoose.Schema(
 
 const appointmentSchema = new mongoose.Schema(
   {
-    id: { type: String, required: true },
     category: { type: String },
     status: {
       type: String,
