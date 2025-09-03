@@ -32,6 +32,13 @@ export const updateAppointmentStatus = async (req, res) => {
 };
 
 export const getAppointments = async (_req, res) => {
-  const list = await Appointment.find().populate('user');
+  const list = await Appointment.find();
   res.json(list);
+};
+
+export const getAppointment = async (req, res) => {
+  const appointment = await Appointment.findById(req.params.id);
+  if (!appointment)
+    return res.status(404).json({ error: 'Appointment not found' });
+  res.json(appointment);
 };
