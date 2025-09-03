@@ -21,7 +21,7 @@ export const updateAppointmentStatus = async (req, res) => {
   await appointment.save();
 
   // If confirmed, create a WorkOrder
-  if (status === 'confirmed') {
+  if (status === 'Confirmed') {
     await WorkOrder.create({
       appointment: appointment._id,
       description: `Work order for appointment ${appointment._id}`
