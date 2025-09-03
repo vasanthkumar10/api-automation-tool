@@ -24,7 +24,7 @@ mongoose
 app.use('/users', userRoutes);
 app.use('/appointments', appointmentRoutes);
 app.use('/searchTimeslot', searchTimeslotRoutes);
-app.use('/workorders', workorderRoutes);
+app.use('/serviceorders', workorderRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
